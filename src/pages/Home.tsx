@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col, Card, Badge, Button, Spinner, Alert } from 'react-bootstrap';
-import  type { Post, PostImage, Comment } from '../types';
+import { useAuth } from '../context/AuthContext';
+import type { Post, PostImage, Comment } from '../types';
 
-const API_URL = 'http://localhost:3001'; 
+const API_URL = 'http://localhost:3001';
 
 interface EnrichedPost extends Post {
   images: PostImage[];
@@ -11,6 +12,8 @@ interface EnrichedPost extends Post {
 }
 
 export const Home = () => {
+  const { user } = useAuth();
+
   const [posts, setPosts] = useState<EnrichedPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +26,6 @@ export const Home = () => {
         if (!resPosts.ok) throw new Error('Error al cargar las publicaciones');
         const rawPosts: Post[] = await resPosts.json();
 
-        // Por cada post, traemos sus imágenes y comentarios visibles según los endpoints de la API
         const enriched = await Promise.all(
           rawPosts.map(async (post) => {
             const [resImages, resComments] = await Promise.all([
@@ -55,16 +57,22 @@ export const Home = () => {
 
   return (
     <Container className="py-4">
-      {}
-      <div className="p-4 mb-4 bg-dark text-white rounded-3">
-        <h1>UnaHur Anti-Social Net</h1>
-        <p className="lead mb-0">
-          La red donde compartís lo que pensás sin algoritmos que te persigan.
-        </p>
+      <div className="p-4 mb-4 bg-dark text-white rounded-3 border-start border-4 border-primary shadow-sm">
+  <h1 className="h2 fw-bold mb-1">UnaHur Anti-Social Net</h1>
+  <p className="text-light text-opacity-75 mb-0">
+    La red donde compartís lo que pensás sin algoritmos que te persigan.
+  </p>
+</div>
+<div className="d-flex justify-content-between align-items-center mb-3">
+        <h2 className="h4 fw-bold mb-0">Publicaciones recientes</h2>
+        {user && (
+          <Link to="/crear-post">
+            <Button variant="primary" size="sm">
+              + Crear publicación
+            </Button>
+          </Link>
+        )}
       </div>
-
-      <h2 className="mb-3">Publicaciones recientes</h2>
-
       {loading && (
         <div className="text-center my-5">
           <Spinner animation="border" role="status" />
@@ -74,14 +82,16 @@ export const Home = () => {
       {error && <Alert variant="danger">{error}</Alert>}
 
       {!loading && !error && posts.length === 0 && (
-        <Alert variant="info">Todavía no hay publicaciones. ¡Sé el primero en postear!</Alert>
+        <Alert variant="info">
+          Todavía no hay publicaciones.{' '}
+          {user ? '¡Sé el primero en postear!' : 'Iniciá sesión para crear la primera.'}
+        </Alert>
       )}
 
       <Row xs={1} md={2} className="g-4">
         {posts.map((post) => (
           <Col key={post.id}>
             <Card className="h-100 shadow-sm">
-            
               {post.images.length > 0 && (
                 <Card.Img
                   variant="top"
@@ -92,10 +102,8 @@ export const Home = () => {
               )}
 
               <Card.Body className="d-flex flex-column">
-                
                 <Card.Text>{post.description}</Card.Text>
 
-               
                 <div className="mb-3">
                   {post.Tags?.map((tag) => (
                     <Badge bg="secondary" className="me-1" key={tag.id}>
@@ -104,7 +112,6 @@ export const Home = () => {
                   ))}
                 </div>
 
-              
                 <div className="mt-auto d-flex justify-content-between align-items-center pt-2 border-top">
                   <small className="text-muted">
                     💬 {post.visibleCommentsCount}{' '}

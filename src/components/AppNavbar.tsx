@@ -1,6 +1,7 @@
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import logoUnahur from '../assets/logoUnahur.png';
 
 
 export function AppNavbar() {
@@ -16,9 +17,13 @@ export function AppNavbar() {
     <Navbar bg="dark" variant="dark" expand="lg" className="mb-4">
       <Container>
         <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
-
-          <span>UnaHur Anti-Social Net</span>
-        </Navbar.Brand>
+  <img
+    src={logoUnahur}
+    alt="Logo UnaHur"
+    style={{ height: '40px', width: 'auto' }}
+  />
+  <span>UnaHur Anti-Social Net</span>
+</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
