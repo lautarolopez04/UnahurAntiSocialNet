@@ -42,7 +42,6 @@ export const Home = () => {
           })
         );
 
-        // Ordenamos para mostrar primero los más recientes (por id descendente)
         setPosts(enriched.sort((a, b) => b.id - a.id));
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Ocurrió un error inesperado');
@@ -82,7 +81,7 @@ export const Home = () => {
         {posts.map((post) => (
           <Col key={post.id}>
             <Card className="h-100 shadow-sm">
-              {/* Imágenes (si las hay) */}
+            
               {post.images.length > 0 && (
                 <Card.Img
                   variant="top"
@@ -93,10 +92,10 @@ export const Home = () => {
               )}
 
               <Card.Body className="d-flex flex-column">
-                {/* Descripción */}
+                
                 <Card.Text>{post.description}</Card.Text>
 
-                {/* Etiquetas */}
+               
                 <div className="mb-3">
                   {post.Tags?.map((tag) => (
                     <Badge bg="secondary" className="me-1" key={tag.id}>
@@ -105,7 +104,7 @@ export const Home = () => {
                   ))}
                 </div>
 
-                {/* Pie de tarjeta: comentarios visibles + botón Ver más */}
+              
                 <div className="mt-auto d-flex justify-content-between align-items-center pt-2 border-top">
                   <small className="text-muted">
                     💬 {post.visibleCommentsCount}{' '}

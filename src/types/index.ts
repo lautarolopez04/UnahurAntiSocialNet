@@ -19,7 +19,7 @@ export type Comment = {
   content: string;
   userId: number;
   postId: number;
-  User?: User; // Opcional por si el backend incluye los datos del autor
+  User?: User; 
 };
 
 export type Post = {

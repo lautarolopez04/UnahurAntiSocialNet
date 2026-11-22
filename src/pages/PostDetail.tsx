@@ -125,12 +125,11 @@ export const PostDetail = () => {
         ← Volver al feed
       </Link>
 
-      {/* Tarjeta principal con descripción, imágenes y etiquetas */}
       <Card className="mb-4 shadow-sm">
         <Card.Body>
           <Card.Text className="fs-5">{post.description}</Card.Text>
 
-          {/* Galería de imágenes si existen */}
+          
           {images.length > 0 && (
             <div className="d-flex flex-column gap-3 my-3">
               {images.map((img) => (
@@ -145,7 +144,7 @@ export const PostDetail = () => {
             </div>
           )}
 
-          {/* Etiquetas */}
+         
           {post.Tags && post.Tags.length > 0 && (
             <div className="mt-3">
               {post.Tags.map((tag) => (
@@ -158,7 +157,7 @@ export const PostDetail = () => {
         </Card.Body>
       </Card>
 
-      {/* Sección de comentarios visibles */}
+     
       <h4 className="mb-3">Comentarios ({comments.length})</h4>
 
       {comments.length === 0 ? (
@@ -174,7 +173,7 @@ export const PostDetail = () => {
         </ListGroup>
       )}
 
-      {/* Formulario controlado para agregar comentario */}
+     
       <Card className="shadow-sm">
         <Card.Body>
           <h5 className="mb-3">Agregar un comentario</h5>

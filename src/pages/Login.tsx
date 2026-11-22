@@ -1,3 +1,5 @@
+import { LoginCard } from '../components/LoginCard';
+
 export function Login() {
-  return <h2>Iniciar Sesión</h2>;
+  return <LoginCard />;
 }

@@ -2,6 +2,7 @@ import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
+
 export function AppNavbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -14,8 +15,9 @@ export function AppNavbar() {
   return (
     <Navbar bg="dark" variant="dark" expand="lg" className="mb-4">
       <Container>
-        <Navbar.Brand as={Link} to="/">
-          UnaHur Anti-Social Net
+        <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
+
+          <span>UnaHur Anti-Social Net</span>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -23,7 +25,7 @@ export function AppNavbar() {
             <Nav.Link as={Link} to="/">
               Inicio
             </Nav.Link>
-            {/* Opciones visibles solo si hay sesión iniciada */}
+
             {user && (
               <>
                 <Nav.Link as={Link} to="/crear-post">

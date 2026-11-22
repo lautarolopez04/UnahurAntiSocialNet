@@ -8,19 +8,20 @@ import { PostDetail } from './pages/PostDetail';
 import { Profile } from './pages/Profile';
 import { CreatePost } from './pages/CreatePost';
 
+
 function App() {
   return (
     <BrowserRouter>
       <AppNavbar />
       <main className="container mb-5">
         <Routes>
-          {/* Rutas Públicas */}
+          
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/post/:id" element={<PostDetail />} />
 
-          {/* Rutas Protegidas (solo usuarios logueados) */}
+          
           <Route
             path="/perfil"
             element={
@@ -38,7 +39,7 @@ function App() {
             }
           />
 
-          {/* Cualquier otra ruta redirige al inicio */}
+          
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
