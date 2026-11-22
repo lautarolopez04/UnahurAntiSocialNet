@@ -15,15 +15,15 @@ export const getUserById = async (id: number): Promise<User> => {
   return res.json();
 };
 
-export const createUser = async (nickName: string): Promise<User> => {
+export const createUser = async (nickName: string, email:string): Promise<User> => {
   const res = await fetch(`${API_URL}/users`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ nickName }),
+    body: JSON.stringify({ nickName, email }),
   });
   if (!res.ok) {
     const errorData = await res.json().catch(() => ({}));
-    throw new Error(errorData.message || 'No se pudo crear el usuario');
+    throw new Error(errorData.error || errorData.message || 'No se pudo crear el usuario');
   }
   return res.json();
 };

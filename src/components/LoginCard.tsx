@@ -3,7 +3,7 @@ import type { FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import type { User } from '../types/index';
-import logoUnahurLogin from '../assets/logoUnahurLogin.png';
+import { BannerCard } from '../components/BannerCard'
 
 const API_URL = 'http://localhost:3001';
 const FIXED_PASSWORD = '123456';
@@ -66,21 +66,7 @@ export const LoginCard = () => {
     return (
         <div className="container py-5">
             <div className="row align-items-center justify-content-center g-4">
-                <div className="col-lg-6 text-start pe-lg-4">
-                    <h1 className="fw-bold text-primary mb-2" style={{ fontSize: '2.25rem' }}>
-                        UnaHur Anti-Social Net
-                    </h1>
-                    <p className="text-secondary mb-4" style={{ maxWidth: '420px' }}>
-                        Conectá con la comunidad UNAHUR y compartí tus publicaciones.
-                    </p>
-                    <img
-                        src={logoUnahurLogin}
-                        alt="Notebook conectada a la red social"
-                        className="img-fluid rounded-2 mt-1"
-                        style={{ maxWidth: '390px', width: '100%' }}
-                    />
-                </div>
-
+                <BannerCard/>
                 <div className="col-md-8 col-lg-5">
                     <div className="card bg-white border shadow-sm rounded-3">
                         <div className="card-body p-4">
