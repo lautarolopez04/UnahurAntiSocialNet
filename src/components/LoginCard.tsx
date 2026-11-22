@@ -66,10 +66,11 @@ export const LoginCard = () => {
     return (
         <div className="container py-5">
             <div className="row align-items-center justify-content-center g-4">
-                <BannerCard/>
+                <BannerCard />
                 <div className="col-md-8 col-lg-5">
                     <div className="card bg-white border shadow-sm rounded-3">
                         <div className="card-body p-4">
+                            <h2 className="fw-bold text-primary text-center mb-4">Iniciar sesión</h2>
                             {errorMsg && (
                                 <div className="alert alert-danger py-2 small text-center" role="alert">
                                     {errorMsg}

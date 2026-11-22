@@ -30,12 +30,12 @@ export function Register() {
     try {
       await createUser(cleanNick, cleanEmail);
       setSuccessMsg('Cuenta creada con éxito');
-      setTimeout(()=> navigate('/login'), 2000);
+      setTimeout(() => navigate('/login'), 2000);
 
-    } catch (err:unknown) {
+    } catch (err: unknown) {
       const detail = err instanceof Error ? err.message : 'No se pudo crear el usuario';
       setErrorMsg(
-        detail ==='Failed to fetch' ? 'No se pudo conectar con la API' : detail
+        detail === 'Failed to fetch' ? 'No se pudo conectar con la API' : detail
       );
 
     } finally {
@@ -46,12 +46,12 @@ export function Register() {
   return (
     <div className='container py-5'>
       <div className='row align-items-center justify-content-center g-4'>
-        <BannerCard/>
+        <BannerCard />
         <div className='col-md-8 col-lg-5'>
           <div className='card bg-white border shadow-sm rounded-3'>
             <div className='card-body p-4'>
               <h2 className='fw-bold text-primary text-center mb-4'> Crear cuenta </h2>
-              
+
               {errorMsg && (
                 <div className='alert alert-danger py-2 small text-center' role='alert'>{errorMsg}</div>
               )}
@@ -63,36 +63,36 @@ export function Register() {
                 <div className='mb-3'>
                   <label htmlFor="registerNickname" className="form-label fw-bold text-dark mb-1"> Usuario </label>
                   <input
-                      id="registerNickname"
-                      type="text"
-                      className={`form-control ${errorMsg && !nickName.trim() ? 'is-invalid' : ''}`}
-                      placeholder="Nombre de usuario"
-                      value={nickName}
-                      onChange={(e) => setNickName(e.target.value)}
-                      disabled={isSubmitting}
+                    id="registerNickname"
+                    type="text"
+                    className={`form-control ${errorMsg && !nickName.trim() ? 'is-invalid' : ''}`}
+                    placeholder="Nombre de usuario"
+                    value={nickName}
+                    onChange={(e) => setNickName(e.target.value)}
+                    disabled={isSubmitting}
                   />
                 </div>
 
                 <div className='mb-3'>
                   <label htmlFor="registerEmail" className="form-label fw-bold text-dark mb-1"> Email </label>
                   <input
-                      id="registerEmail"
-                      type="email"
-                      className={`form-control ${errorMsg && !email.trim() ? 'is-invalid' : ''}`}
-                      placeholder="ejemplo@email.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      disabled={isSubmitting}
+                    id="registerEmail"
+                    type="email"
+                    className={`form-control ${errorMsg && !email.trim() ? 'is-invalid' : ''}`}
+                    placeholder="ejemplo@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={isSubmitting}
                   />
                 </div>
 
-                <div>
+                <div className="d-grid mt-3">
                   <button
                     type="submit"
                     className="btn btn-success fw-semibold py-2"
                     disabled={isSubmitting || !!successMsg}
                   >
-                    Registrarse                
+                    {isSubmitting ? 'Registrando...' : 'Registrarse'}
                   </button>
                 </div>
               </form>
@@ -101,7 +101,7 @@ export function Register() {
 
               <div className='text-center'>
                 <Link to="/login" className="btn btn-outline-primary fw-semibold px-4">
-                    Ya tengo cuenta
+                  Ya tengo cuenta
                 </Link>
               </div>
             </div>
