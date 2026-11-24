@@ -11,7 +11,7 @@ export function CreatePost() {
   const navigate = useNavigate();
 
   const [description, setDescription] = useState<string>('');
-  const [imageUrl, setImageUrl] = useState<string>('');
+  const [imageUrls, setImageUrls] = useState<string[]>(['']);
   const [tags, setTags] = useState<Tag[]>([]);
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
   const [errorMsg, setErrorMsg] = useState<string>('');
@@ -28,6 +28,18 @@ export function CreatePost() {
   const toggleTag = (id: number) => {
     setSelectedTags((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const addImageField = () => {
+    setImageUrls((prev) => [...prev, '']);
+  };
+
+  const updateImageUrl = (index: number, newValue: string) => {
+    setImageUrls((prev) =>
+      prev.map((currentUrl, currentIndex) =>
+        currentIndex === index ? newValue : currentUrl
+      )
     );
   };
 
@@ -59,15 +71,18 @@ export function CreatePost() {
 
       const createdPost = await res.json();
 
-      if (imageUrl.trim() && createdPost.id) {
-        await fetch(`${API_URL}/postimages`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            url: imageUrl.trim(),
-            postId: createdPost.id,
-          }),
-        });
+      for (const rawUrl of imageUrls) {
+        const cleanUrl = rawUrl.trim();
+        if (cleanUrl && createdPost.id) {
+          await fetch(`${API_URL}/postimages`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              url: cleanUrl,
+              postId: createdPost.id,
+            }),
+          });
+        }
       }
 
       navigate('/perfil');
@@ -86,7 +101,7 @@ export function CreatePost() {
 
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label className="form-label fw-bold">Descripción </label>
+              <label className="form-label fw-bold">Descripción</label>
               <textarea
                 className="form-control"
                 rows={3}
@@ -97,14 +112,30 @@ export function CreatePost() {
             </div>
 
             <div className="mb-3">
-              <label className="form-label fw-bold">URL de imagen (opcional)</label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="https://..."
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-              />
+              <label className="form-label fw-bold d-block">
+                URLs de imágenes (opcional)
+              </label>
+
+              <div className="d-flex flex-column gap-2">
+                {imageUrls.map((url, index) => (
+                  <input
+                    key={index}
+                    type="text"
+                    className="form-control"
+                    placeholder="https://..."
+                    value={url}
+                    onChange={(e) => updateImageUrl(index, e.target.value)}
+                  />
+                ))}
+              </div>
+
+              <button
+                type="button"
+                className="btn btn-outline-primary btn-sm mt-2"
+                onClick={addImageField}
+              >
+                + Agregar otra URL
+              </button>
             </div>
 
             <div className="mb-4">
