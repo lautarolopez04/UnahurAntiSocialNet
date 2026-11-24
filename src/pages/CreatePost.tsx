@@ -78,7 +78,7 @@ export function CreatePost() {
 
   return (
     <div className="container py-4" style={{ maxWidth: '650px' }}>
-      <div className="card bg-white border shadow-sm rounded-3">
+      <div className="card border shadow-sm rounded-3">
         <div className="card-body p-4">
           <h2 className="h4 fw-bold mb-3">Crear publicación</h2>
 

@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Container, Card, Button, Alert, Spinner, CardBody, CardText } from 'react-bootstrap'
 import { useAuth } from '../context/AuthContext'
-import { getPostsByUserId, getCommentsByPostId } from '../services/api'
-import type { Post } from '../types'
+import { getPostsByUserId, getCommentsByPostId, getPostImages } from '../services/api'
+import type { Post, PostImage } from '../types'
 
 interface EnrichedPost extends Post {
+  images: PostImage[];
   visibleCommentsCount: number;
 }
 
@@ -28,14 +29,11 @@ export function Profile() {
           const posts = await getPostsByUserId(user.id);    
           const enriched = await Promise.all(
             posts.map(async (p) => {
-              let total = 0;
-              try {
-                const comentarios = await getCommentsByPostId(p.id);
-                total = comentarios.length;
-              } catch {
-                total = 0;
-              }
-              return {...p, visibleCommentsCount: total}
+              const [comentarios, images] = await Promise.all([
+                getCommentsByPostId(p.id).catch(() => []),
+                getPostImages(p.id).catch(() => []),
+              ]);              
+              return {...p, visibleCommentsCount: comentarios.length, images}
             })
           );
           setPublicaciones(enriched.sort((a,b) => b.id - a.id));
@@ -86,9 +84,17 @@ export function Profile() {
         </Card>
 
         <hr></hr>
-
-        <h2 className='h5 mb-3'>Mis publicaciones</h2>
-
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h2 className='h5 mb-3'>Mis publicaciones</h2>
+          {user && (
+            <Link to="/crear-post">
+              <Button variant="primary" size="sm">
+                + Crear publicación
+              </Button>
+            </Link>
+          )}
+        </div>
+        
         {loading && (
           <div className='text-center my-5'>
             <Spinner animation='border' role='status' variant='light'></Spinner>
@@ -102,6 +108,14 @@ export function Profile() {
         <div className='d-flex flex-column gap-3 pb-5'>
           {publicaciones.map((p) => (
             <Card key={p.id} className='w-100'>
+              {p.images.length > 0 && (
+                <Card.Img
+                  variant='top'
+                  src={p.images[0].url}
+                  alt="Imagen"
+                  style={{ maxHeight:'250px', objectFit:'cover' }}
+                ></Card.Img>
+              )}
               <CardBody className='d-flex flex-column'>
                 <CardText className='fs-5'>
                   {p.description}

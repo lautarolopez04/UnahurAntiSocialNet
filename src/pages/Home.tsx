@@ -63,6 +63,7 @@ export const Home = () => {
     La red donde compartís lo que pensás sin algoritmos que te persigan.
   </p>
 </div>
+<hr></hr>
 <div className="d-flex justify-content-between align-items-center mb-3">
         <h2 className="h4 fw-bold mb-0">Publicaciones recientes</h2>
         {user && (

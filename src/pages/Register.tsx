@@ -48,7 +48,7 @@ export function Register() {
       <div className='row align-items-center justify-content-center g-4'>
         <BannerCard />
         <div className='col-md-8 col-lg-5'>
-          <div className='card bg-white border shadow-sm rounded-3'>
+          <div className='card border shadow-sm rounded-3'>
             <div className='card-body p-4'>
               <h2 className='fw-bold text-primary text-center mb-4'> Crear cuenta </h2>
 
@@ -61,7 +61,7 @@ export function Register() {
 
               <form onSubmit={handleSubmit} noValidate>
                 <div className='mb-3'>
-                  <label htmlFor="registerNickname" className="form-label fw-bold text-dark mb-1"> Usuario </label>
+                  <label htmlFor="registerNickname" className="form-label fw-bold mb-1"> Usuario </label>
                   <input
                     id="registerNickname"
                     type="text"
@@ -74,7 +74,7 @@ export function Register() {
                 </div>
 
                 <div className='mb-3'>
-                  <label htmlFor="registerEmail" className="form-label fw-bold text-dark mb-1"> Email </label>
+                  <label htmlFor="registerEmail" className="form-label fw-bold mb-1"> Email </label>
                   <input
                     id="registerEmail"
                     type="email"

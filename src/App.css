@@ -1,0 +1,122 @@
+:root {
+    --app-bg: #070d0e;
+    --app-surface: #0e1a1c;
+    --app-surface-2: #132629;
+    --app-border: #1d403a;
+    --app-text: #e6f7f8;
+    --app-muted: #6cca8fa9;
+    --app-accent: #1a73e8;
+    --app-accent-hover: #4a90f0;
+    --app-accent-rgb: 26, 115, 232;
+    --app-link: #6aa8ff;
+    --app-link-hover: #9cc5ff;
+    --app-green: #1e9150;
+    --app-green-hover: #27a85f;
+    --app-green-rgb: 30, 145, 80;
+    --app-green-text: #4cc98a;
+}
+
+[data-bs-theme="dark"] {
+    --bs-body-bg: var(--ap-bg);
+    --bs-body-bg-rgb: 7, 13, 14;
+    --bs-body-color: var(--app-text);
+    --bs-body-color-rgb: 230, 247, 248;
+    --bs-border-color: var(--app-border);
+    --bs-secondary-color: var(--app-accent);
+    --bs-primary: var(--app-accent);
+    --bs-primary-rgb: var(--app-accent-rgb);
+    --bs-link-color: var(--app-link);
+    --bs-link-color-rgb: 106, 168, 255;
+    --bs-link-hover-color: var(--app-link-hover);
+    --bs-link-hover-color-rgb: 156, 197, 255;
+    --bs-success: var(--app-green);
+    --bs-success-rgb: var(--app-green-rgb);
+}
+
+.card {
+    --bs-card-bg: var(--app-surface);
+    --bs-card-border-color:var(--app-border);
+    --bs-card-cap-bg: var(--app-surface-2);   
+}
+
+.list-group {
+    --bs-list-group-bg: var(--app-surface);
+    --bs-list-group-color: var(--app-text);
+    --bs-list-group-border-color: var(--app-border);
+}
+
+.form-control,
+.form-select {
+    background-color: var(--app-surface);
+    border-color: var(--app-border);
+    color: var(--app-text)
+}
+
+.form-control::placeholder {color: var(--app-muted); opacity: 0.7;}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: var(--app-surface);
+    color: var(--app-accent);
+    box-shadow: 0 0 0 0.25rem rgba(--app-accent-rgb, 0.25);
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--app-accent);
+    --bs-btn-border-color: var(--app-accent);
+    --bs-btn-hover-bg: var(--app-accent-hover);
+    --bs-btn-hover-border-color: var(--app-accent-hover);
+    --bs-btn-active-bg: #1259b8;
+    --bs-btn-active-border-color: #1259b8;
+    --bs-btn-disabled-bg: var(--app-accent);
+    --bs-btn-disabled-border-color: var(--app-accent);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--app-muted);
+    --bs-btn-border-color: var(--app-accent);
+    --bs-btn-hover-bg: var(--app-accent);
+    --bs-btn-hover-border-color: var(--app-accent);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-active-border-color: var(--app-accent);
+}
+
+.btn-success {
+    --bs-btn-bg: var(--app-green);
+    --bs-btn-border-color: var(--app-green);
+    --bs-btn-hover-bg: var(--app-green-hover);
+    --bs-btn-hover-border-color: var(--app-green-hover);
+    --bs-btn-active-bg: #176f3e;
+    --bs-btn-active-border-color: #176f3e;
+    --bs-btn-disabled-bg: var(--app-green);
+    --bs-btn-disabled-border-color: var(--app-green);
+}
+
+.btn-outline-success {
+    --bs-btn-color: var(--app-green-text);
+    --bs-btn-border-color: var(--app-green);
+    --bs-btn-hover-bg: var(--app-green);
+    --bs-btn-hover-border-color: var(--app-green);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-active-bg: var(--app-green);
+    --bs-btn-active-border-color: var(--app-green);
+}
+
+.bg-dark {
+    background-color: var(--app-surface-2) !important;
+}
+
+.navbar.bg-dark {
+    background-color: #0b2a4a !important;
+}
+
+.navbar {
+    --bs-navbar-color: rgba(255, 255, 255, 0.85);
+    --bs-navbar-hover-color: var(--app-muted);
+    --bs-navbar-active-color:#fff;
+    border-bottom: 1px solid var(--app-border);
+}
+
+.text-primary {
+    color: var(--app-link) !important;
+}

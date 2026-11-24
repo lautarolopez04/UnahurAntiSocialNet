@@ -68,7 +68,7 @@ export const LoginCard = () => {
             <div className="row align-items-center justify-content-center g-4">
                 <BannerCard />
                 <div className="col-md-8 col-lg-5">
-                    <div className="card bg-white border shadow-sm rounded-3">
+                    <div className="card border shadow-sm rounded-3">
                         <div className="card-body p-4">
                             <h2 className="fw-bold text-primary text-center mb-4">Iniciar sesión</h2>
                             {errorMsg && (
@@ -79,7 +79,7 @@ export const LoginCard = () => {
 
                             <form onSubmit={handleSubmit} noValidate>
                                 <div className="mb-3">
-                                    <label htmlFor="loginNickname" className="form-label fw-bold text-dark mb-1">
+                                    <label htmlFor="loginNickname" className="form-label fw-bold mb-1">
                                         Usuario
                                     </label>
                                     <input
@@ -94,7 +94,7 @@ export const LoginCard = () => {
                                 </div>
 
                                 <div className="mb-3">
-                                    <label htmlFor="loginPassword" className="form-label fw-bold text-dark mb-1">
+                                    <label htmlFor="loginPassword" className="form-label fw-bold mb-1">
                                         Contraseña
                                     </label>
                                     <input
