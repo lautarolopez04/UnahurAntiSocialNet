@@ -19,7 +19,6 @@ export const PostDetail = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Estados para el formulario controlado de nuevo comentario
   const [newComment, setNewComment] = useState<string>('');
   const [commentError, setCommentError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -75,12 +74,10 @@ export const PostDetail = () => {
     };
   }, []);
 
-  // Manejo del envío del comentario (POST /comments)
   const handleCommentSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setCommentError(null);
 
-    // Validación de campo obligatorio
     if (!newComment.trim()) {
       setCommentError('El comentario no puede estar vacío.');
       return;
@@ -109,7 +106,6 @@ export const PostDetail = () => {
         throw new Error('No se pudo publicar el comentario.');
       }
 
-      // Limpiamos el input y recargamos los comentarios visibles
       setNewComment('');
       const resComments = await fetch(`${API_URL}/comments/post/${id}`);
       if (resComments.ok) {
@@ -175,7 +171,6 @@ export const PostDetail = () => {
             </div>
           )}
 
-         
           {post.Tags && post.Tags.length > 0 && (
             <div className="mt-3">
               {post.Tags.map((tag) => (
@@ -188,7 +183,6 @@ export const PostDetail = () => {
         </Card.Body>
       </Card>
 
-     
       <section aria-labelledby="titulo-comentarios">
       <h2 id="titulo-comentarios" className="h4 mb-3">Comentarios ({comments.length})</h2>
 
@@ -214,7 +208,6 @@ export const PostDetail = () => {
         </ListGroup>
       )}
 
-     
       <Card className="shadow-sm auth-card animar-entrada">
         <Card.Body>
           <h3 className="h5 mb-3">Agregar un comentario</h3>
