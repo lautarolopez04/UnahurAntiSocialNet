@@ -22,39 +22,47 @@ export const PostDetail = () => {
   const [commentError, setCommentError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState<boolean>(false);
 
-  // Función reutilizable para cargar los datos del post, imágenes y comentarios
-  const fetchPostData = async () => {
-    if (!id) return;
-    try {
-      setLoading(true);
-      setError(null);
-
-      const [resPost, resImages, resComments] = await Promise.all([
-        fetch(`${API_URL}/posts/${id}`),
-        fetch(`${API_URL}/postimages/post/${id}`),
-        fetch(`${API_URL}/comments/post/${id}`),
-      ]);
-
-      if (!resPost.ok) {
-        throw new Error('No se pudo encontrar la publicación solicitada.');
-      }
-
-      const postData: Post = await resPost.json();
-      const imagesData: PostImage[] = resImages.ok ? await resImages.json() : [];
-      const commentsData: Comment[] = resComments.ok ? await resComments.json() : [];
-
-      setPost(postData);
-      setImages(imagesData);
-      setComments(commentsData);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al cargar la publicación.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    let cancelado = false;
+
+    const fetchPostData = async () => {
+      if (!id) return;
+      try {
+        setLoading(true);
+        setError(null);
+
+        const [resPost, resImages, resComments] = await Promise.all([
+          fetch(`${API_URL}/posts/${id}`),
+          fetch(`${API_URL}/postimages/post/${id}`),
+          fetch(`${API_URL}/comments/post/${id}`),
+        ]);
+
+        if (!resPost.ok) {
+          throw new Error('No se pudo encontrar la publicación solicitada.');
+        }
+
+        const postData: Post = await resPost.json();
+        const imagesData: PostImage[] = resImages.ok ? await resImages.json() : [];
+        const commentsData: Comment[] = resComments.ok ? await resComments.json() : [];
+
+        if (cancelado) return;
+
+        setPost(postData);
+        setImages(imagesData);
+        setComments(commentsData);
+      } catch (err) {
+        if (cancelado) return;
+        setError(err instanceof Error ? err.message : 'Error al cargar la publicación.');
+      } finally {
+        if (!cancelado) setLoading(false);
+      }
+    };
+
     fetchPostData();
+
+    return () => {
+      cancelado = true;
+    };
   }, [id]);
 
   // Manejo del envío del comentario (POST /comments)
