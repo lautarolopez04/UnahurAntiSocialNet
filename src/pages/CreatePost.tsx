@@ -72,11 +72,12 @@ export function CreatePost() {
       }
 
       const createdPost = await res.json();
+      let imagenesFallidas = 0;
 
       for (const rawUrl of imageUrls) {
         const cleanUrl = rawUrl.trim();
         if (cleanUrl && createdPost.id) {
-          await fetch(`${API_URL}/postimages`, {
+          const resImage = await fetch(`${API_URL}/postimages`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -84,7 +85,15 @@ export function CreatePost() {
               postId: createdPost.id,
             }),
           });
+
+          if (!resImage.ok) {
+            imagenesFallidas = imagenesFallidas + 1;
+          }
         }
+      }
+
+      if (imagenesFallidas > 0) {
+        alert(`La publicación se creó, pero no se pudieron subir ${imagenesFallidas} imagen(es).`);
       }
 
       navigate('/perfil');
