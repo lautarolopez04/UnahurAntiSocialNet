@@ -54,20 +54,20 @@ export function Register() {
       <div className='row align-items-center justify-content-center g-4'>
         <BannerCard />
         <div className='col-md-8 col-lg-5'>
-          <div className='card border shadow-sm rounded-3'>
+          <div className='card border shadow-sm rounded-4 auth-card animar-entrada'>
             <div className='card-body p-4'>
-              <h2 className='fw-bold text-primary text-center mb-4'> Crear cuenta </h2>
+              <h2 className='fw-bold text-primary text-center mb-1'> Crear cuenta </h2>
+              <p className='text-muted text-center small mb-4'>Sumate a la red menos social de la UNAHUR.</p>
 
               {errorMsg && (
-                <div className='alert alert-danger py-2 small text-center' role='alert'>{errorMsg}</div>
+                <div className='alert alert-danger py-2 small text-center alerta-animada' role='alert'>{errorMsg}</div>
               )}
               {successMsg && (
-                <div className='alert alert-success py-2 small text-center' role='status'>{successMsg}</div>
+                <div className='alert alert-success py-2 small text-center alerta-animada' role='status'>{successMsg}</div>
               )}
 
               <form onSubmit={handleSubmit} noValidate>
-                <div className='mb-3'>
-                  <label htmlFor="registerNickname" className="form-label fw-bold mb-1"> Usuario </label>
+                <div className='form-floating mb-3'>
                   <input
                     id="registerNickname"
                     type="text"
@@ -77,10 +77,10 @@ export function Register() {
                     onChange={(e) => setNickName(e.target.value)}
                     disabled={isSubmitting}
                   />
+                  <label htmlFor="registerNickname">Usuario</label>
                 </div>
 
-                <div className='mb-3'>
-                  <label htmlFor="registerEmail" className="form-label fw-bold mb-1"> Email </label>
+                <div className='form-floating mb-3'>
                   <input
                     id="registerEmail"
                     type="email"
@@ -90,14 +90,18 @@ export function Register() {
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={isSubmitting}
                   />
+                  <label htmlFor="registerEmail">Email</label>
                 </div>
 
                 <div className="d-grid mt-3">
                   <button
                     type="submit"
-                    className="btn btn-success fw-semibold py-2"
+                    className="btn btn-success fw-semibold py-2 rounded-pill btn-animado"
                     disabled={isSubmitting || !!successMsg}
                   >
+                    {isSubmitting && (
+                      <span className="spinner-border spinner-border-sm me-2" aria-hidden="true" />
+                    )}
                     {isSubmitting ? 'Registrando...' : 'Registrarse'}
                   </button>
                 </div>
@@ -106,7 +110,7 @@ export function Register() {
               <hr className='my-4'></hr>
 
               <div className='text-center'>
-                <Link to="/login" className="btn btn-outline-primary fw-semibold px-4">
+                <Link to="/login" className="btn btn-outline-primary fw-semibold px-4 rounded-pill btn-animado">
                   Ya tengo cuenta
                 </Link>
               </div>

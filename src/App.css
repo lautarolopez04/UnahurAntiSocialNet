@@ -108,7 +108,7 @@
 }
 
 .navbar.bg-dark {
-    background-color: #0b2a4a !important;
+    background-color: rgba(11, 42, 74, 0.85) !important;
 }
 
 .navbar {
@@ -123,7 +123,7 @@
 }
 
 .navbar .nav-link.active {
-    border-bottom: 2px solid var(--app-accent);
+    color: #fff;
 }
 
 .post-card {
@@ -187,6 +187,287 @@
     background-color: var(--app-surface);
 }
 
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes brillo {
+    from {
+        background-position: -400px 0;
+    }
+    to {
+        background-position: 400px 0;
+    }
+}
+
+@keyframes flotar {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes moverGradiente {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes pulso {
+    0% {
+        box-shadow: 0 0 0 0 rgba(var(--app-accent-rgb), 0.6);
+    }
+    70% {
+        box-shadow: 0 0 0 14px rgba(var(--app-accent-rgb), 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(var(--app-accent-rgb), 0);
+    }
+}
+
+@keyframes rebote {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.12);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes deslizar {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animar-entrada {
+    animation: aparecer 0.5s ease backwards;
+}
+
+.alerta-animada {
+    animation: deslizar 0.3s ease both;
+}
+
+.navbar-glass {
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+.brand-animada img {
+    transition: transform 0.4s ease;
+}
+
+.brand-animada:hover img {
+    transform: rotate(-8deg) scale(1.08);
+}
+
+.nav-pill {
+    border-radius: 999px;
+    padding: 0.4rem 1rem !important;
+    transition: background-color 0.25s, color 0.25s, transform 0.2s;
+}
+
+.nav-pill:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
+}
+
+.navbar .nav-pill.active {
+    background-color: var(--app-accent);
+    box-shadow: 0 4px 14px rgba(var(--app-accent-rgb), 0.45);
+}
+
+.usuario-chip {
+    color: var(--app-text);
+    padding: 0.25rem 0.75rem 0.25rem 0.25rem;
+    border-radius: 999px;
+    border: 1px solid var(--app-border);
+    background-color: rgba(255, 255, 255, 0.04);
+    transition: background-color 0.25s, border-color 0.25s;
+}
+
+.usuario-chip:hover {
+    color: #fff;
+    border-color: var(--app-accent);
+    background-color: rgba(var(--app-accent-rgb), 0.15);
+}
+
+.btn {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s, color 0.2s;
+}
+
+.btn-animado:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(var(--app-accent-rgb), 0.35);
+}
+
+.btn-animado:active:not(:disabled) {
+    transform: scale(0.96);
+}
+
+.banner-home {
+    background: linear-gradient(120deg, var(--app-surface-2), #0b2a4a, var(--app-surface-2)) !important;
+    background-size: 200% 200% !important;
+    animation: aparecer 0.5s ease backwards, moverGradiente 10s ease infinite;
+}
+
+.titulo-gradiente {
+    background: linear-gradient(90deg, var(--app-link), var(--app-green-text), var(--app-link));
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: moverGradiente 6s ease infinite;
+}
+
+.imagen-flotante {
+    animation: flotar 5s ease-in-out infinite;
+}
+
+.auth-card {
+    background-color: rgba(14, 26, 28, 0.85);
+    backdrop-filter: blur(8px);
+    border-top: 3px solid var(--app-accent) !important;
+    box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.45) !important;
+}
+
+.form-floating > .form-control {
+    border-radius: 0.75rem;
+    transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.form-floating > label {
+    color: var(--bs-secondary-color);
+}
+
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+    color: var(--app-link);
+}
+
+.form-floating > .form-control:focus ~ label::after,
+.form-floating > .form-control:not(:placeholder-shown) ~ label::after {
+    background-color: var(--app-surface);
+}
+
+.tag-chip {
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.tag-chip.btn-primary {
+    animation: rebote 0.3s ease;
+}
+
+.tag-badge {
+    transition: transform 0.2s;
+}
+
+.tag-badge:hover {
+    transform: scale(1.08);
+}
+
+.avatar-mini {
+    background-color: var(--app-surface-2);
+    border: 2px solid var(--app-border);
+    color: var(--app-text);
+    object-fit: cover;
+}
+
+.avatar-pulso {
+    animation: pulso 2.5s infinite;
+}
+
+.perfil-header {
+    background: linear-gradient(135deg, rgba(var(--app-accent-rgb), 0.18), var(--app-surface) 60%) !important;
+}
+
+.comentario-item {
+    transition: background-color 0.2s;
+}
+
+.comentario-item:hover {
+    background-color: var(--app-surface-2);
+}
+
+.skeleton {
+    background: linear-gradient(90deg, var(--app-surface-2) 25%, #1d3a3e 50%, var(--app-surface-2) 75%);
+    background-size: 800px 100%;
+    animation: brillo 1.2s linear infinite;
+    border-radius: 0.5rem;
+}
+
+.skeleton-img {
+    height: 180px;
+    border-radius: 0;
+}
+
+.skeleton-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.skeleton-linea {
+    height: 0.8rem;
+    width: 100%;
+}
+
+.sidebar-sticky {
+    position: sticky;
+    top: 90px;
+}
+
+.sidebar-card {
+    border-radius: 1rem;
+}
+
+.sidebar-usuario {
+    transition: transform 0.2s;
+}
+
+.sidebar-usuario:hover {
+    transform: translateX(4px);
+}
+
+.tendencia-item {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.tendencia-item:hover {
+    background-color: var(--app-surface-2);
+}
+
+@media (max-width: 991px) {
+    .navbar-collapse .nav-pill {
+        text-align: left;
+    }
+}
+
 @media (max-width: 576px) {
     .post-card-img {
         height: 180px;
@@ -201,5 +482,15 @@
     .btn-volver-arriba {
         bottom: 1rem;
         right: 1rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }

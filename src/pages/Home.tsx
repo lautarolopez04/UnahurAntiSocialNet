@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Row, Col, Card, Badge, Button, Spinner, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Card, Badge, Button, Alert } from 'react-bootstrap';
 import { useAuth } from '../context/AuthContext';
+import { Avatar } from '../components/Avatar';
+import { SkeletonCard } from '../components/SkeletonCard';
+import { Sidebar } from '../components/Sidebar';
 import type { Post, PostImage, Comment } from '../types';
 
 const API_URL = 'http://localhost:3001';
@@ -85,6 +88,18 @@ export const Home = () => {
     };
   }, [posts]);
 
+  const conteoTags: Record<string, number> = posts.reduce((acumulado: Record<string, number>, post: EnrichedPost) => {
+    post.Tags?.forEach((tag) => {
+      acumulado[tag.name] = (acumulado[tag.name] || 0) + 1;
+    });
+    return acumulado;
+  }, {});
+
+  const tendencias = Object.entries(conteoTags)
+    .map(([nombre, cantidad]) => ({ nombre, cantidad }))
+    .sort((a, b) => b.cantidad - a.cantidad)
+    .slice(0, 6);
+
   const postsVisibles = posts.slice(0, cantidadVisible);
   const hayMasPosts = cantidadVisible < posts.length;
 
@@ -98,7 +113,9 @@ export const Home = () => {
 
   return (
     <Container className="py-4">
-      <div className="p-4 mb-4 bg-dark text-white rounded-3 border-start border-4 border-primary shadow-sm">
+      <Row className="g-4">
+      <Col lg={8}>
+      <div className="p-4 mb-4 bg-dark text-white rounded-3 border-start border-4 border-primary shadow-sm banner-home animar-entrada">
   <h1 className="h2 fw-bold mb-1">UnaHur Anti-Social Net</h1>
   <p className="text-light text-opacity-75 mb-0">
     La red donde compartís lo que pensás sin algoritmos que te persigan.
@@ -109,17 +126,15 @@ export const Home = () => {
 <div className="d-flex justify-content-between align-items-center mb-3">
         <h2 id="titulo-feed" className="h4 fw-bold mb-0">Publicaciones recientes</h2>
         {user && (
-          <Button as={Link} to="/crear-post" variant="primary" size="sm">
+          <Button as={Link} to="/crear-post" variant="primary" size="sm" className="rounded-pill px-3 btn-animado text-nowrap">
             + Crear publicación
           </Button>
         )}
       </div>
       {loading && (
-        <div className="text-center my-5">
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Cargando publicaciones...</span>
-          </Spinner>
-        </div>
+        <Row xs={1} md={2} className="g-4">
+          <SkeletonCard cantidad={4} enColumnas />
+        </Row>
       )}
 
       {error && <Alert variant="danger">{error}</Alert>}
@@ -132,9 +147,19 @@ export const Home = () => {
       )}
 
       <Row xs={1} md={2} className="g-4">
-        {postsVisibles.map((post) => (
+        {postsVisibles.map((post, index) => (
           <Col key={post.id}>
-            <Card as="article" className="h-100 shadow-sm post-card">
+            <Card
+              as="article"
+              className="h-100 shadow-sm post-card animar-entrada"
+              style={{ animationDelay: `${(index % POSTS_POR_TANDA) * 70}ms` }}
+            >
+              {post.User && (
+                <div className="d-flex align-items-center gap-2 px-3 pt-3 pb-2">
+                  <Avatar nickName={post.User.nickName} tamano={34} />
+                  <span className="fw-semibold small">@{post.User.nickName}</span>
+                </div>
+              )}
               {post.images.length > 0 && (
                 <Card.Img
                   variant="top"
@@ -153,7 +178,7 @@ export const Home = () => {
 
                 <div className="mb-3">
                   {post.Tags?.map((tag) => (
-                    <Badge bg="secondary" className="me-1" key={tag.id}>
+                    <Badge bg="secondary" className="me-1 tag-badge" key={tag.id}>
                       #{tag.name}
                     </Badge>
                   ))}
@@ -165,7 +190,7 @@ export const Home = () => {
                     {post.visibleCommentsCount === 1 ? 'comentario' : 'comentarios'}
                   </small>
 
-                  <Button as={Link} to={`/post/${post.id}`} variant="primary" size="sm">
+                  <Button as={Link} to={`/post/${post.id}`} variant="primary" size="sm" className="rounded-pill px-3 btn-animado">
                     Ver más
                   </Button>
                 </div>
@@ -177,23 +202,31 @@ export const Home = () => {
 
       {hayMasPosts && (
         <div className="text-center mt-4">
-          <Button variant="outline-primary" onClick={cargarMas}>
+          <Button variant="outline-primary" className="rounded-pill px-4 btn-animado" onClick={cargarMas}>
             Ver más publicaciones
           </Button>
         </div>
       )}
 
       {!loading && !hayMasPosts && posts.length > 0 && (
-        <p className="text-center text-muted mt-4 mb-0">
+        <p className="text-center text-muted mt-4 mb-0 animar-entrada">
           Llegaste al final. No hay más publicaciones por ahora.
         </p>
       )}
 </section>
+      </Col>
+
+      <Col lg={4} className="d-none d-lg-block">
+        <div className="sidebar-sticky">
+          <Sidebar tendencias={tendencias} />
+        </div>
+      </Col>
+      </Row>
 
       {mostrarBotonArriba && (
         <Button
           variant="primary"
-          className="btn-volver-arriba shadow"
+          className="btn-volver-arriba shadow btn-animado animar-entrada"
           onClick={volverArriba}
           aria-label="Volver arriba"
         >

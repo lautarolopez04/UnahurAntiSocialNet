@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Container, Card, Button, Alert, Spinner, CardBody, CardText } from 'react-bootstrap'
+import { Container, Card, Button, Alert, CardBody, CardText } from 'react-bootstrap'
 import { useAuth } from '../context/AuthContext'
 import { getPostsByUserId, getCommentsByPostId, getPostImages } from '../services/api'
+import { SkeletonCard } from '../components/SkeletonCard'
 import type { Post, PostImage } from '../types'
 
 interface EnrichedPost extends Post {
@@ -67,9 +68,9 @@ export function Profile() {
   return (
     <div>
       <Container className='py-4' style={{maxWidth:'800px'}}>
-        <Card className='mb-4 shadow-sm'>
+        <Card className='mb-4 shadow-sm perfil-header animar-entrada'>
           <Card.Body className='d-flex align-items-center gap-3 flex-wrap'>
-            <div className='d-flex align-items-center justify-content-center rounded-circle fw-bold flex-shrink-0 avatar-perfil'
+            <div className='d-flex align-items-center justify-content-center rounded-circle fw-bold flex-shrink-0 avatar-perfil avatar-pulso'
                 aria-hidden='true'
             >
               {user?.nickName.charAt(0).toUpperCase()}
@@ -86,7 +87,7 @@ export function Profile() {
               </small>
             </div>
 
-            <Button variant='outline-danger' size='sm' onClick={handleLogout}>
+            <Button variant='outline-danger' size='sm' className='rounded-pill px-3 btn-animado' onClick={handleLogout}>
               Cerrar sesión
             </Button>
           </Card.Body>
@@ -97,25 +98,23 @@ export function Profile() {
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h2 id='titulo-mis-publicaciones' className='h5 mb-0'>Mis publicaciones</h2>
           {user && (
-            <Button as={Link} to="/crear-post" variant="primary" size="sm">
+            <Button as={Link} to="/crear-post" variant="primary" size="sm" className="rounded-pill px-3 btn-animado text-nowrap">
               + Crear publicación
             </Button>
           )}
         </div>
 
         {loading && (
-          <div className='text-center my-5'>
-            <Spinner animation='border' role='status' variant='light'>
-              <span className='visually-hidden'>Cargando tus publicaciones...</span>
-            </Spinner>
+          <div className='d-flex flex-column gap-3'>
+            <SkeletonCard cantidad={2} />
           </div>
         )}
         {error && <Alert variant='danger'>{error}</Alert>}
         {!loading && !error && publicaciones.length === 0 && (
-          <Card className='text-center p-4'>
+          <Card className='text-center p-4 animar-entrada'>
             <p className='mb-3'>Todavía no publicaste nada.</p>
             <div>
-              <Button as={Link} to="/crear-post" variant="primary">
+              <Button as={Link} to="/crear-post" variant="primary" className="rounded-pill px-4 btn-animado">
                 Crear mi primera publicación
               </Button>
             </div>
@@ -123,8 +122,13 @@ export function Profile() {
         )}
 
         <div className='d-flex flex-column gap-3 pb-5'>
-          {publicaciones.map((p) => (
-            <Card as='article' key={p.id} className='w-100 shadow-sm post-card'>
+          {publicaciones.map((p, index) => (
+            <Card
+              as='article'
+              key={p.id}
+              className='w-100 shadow-sm post-card animar-entrada'
+              style={{ animationDelay: `${Math.min(index, 8) * 70}ms` }}
+            >
               {p.images.length > 0 && (
                 <Card.Img
                   variant='top'
@@ -148,7 +152,7 @@ export function Profile() {
                     {p.visibleCommentsCount === 1 ? 'comentario' : 'comentarios'}
                   </small>
 
-                  <Button as={Link} to={`/post/${p.id}`} size='sm'>
+                  <Button as={Link} to={`/post/${p.id}`} size='sm' className='rounded-pill px-3 btn-animado'>
                     Ver más
                   </Button>
                 </div>

@@ -72,20 +72,18 @@ export const LoginCard = () => {
             <div className="row align-items-center justify-content-center g-4">
                 <BannerCard />
                 <div className="col-md-8 col-lg-5">
-                    <div className="card border shadow-sm rounded-3">
+                    <div className="card border shadow-sm rounded-4 auth-card animar-entrada">
                         <div className="card-body p-4">
-                            <h2 className="fw-bold text-primary text-center mb-4">Iniciar sesión</h2>
+                            <h2 className="fw-bold text-primary text-center mb-1">Iniciar sesión</h2>
+                            <p className="text-muted text-center small mb-4">¡Qué bueno verte de nuevo!</p>
                             {errorMsg && (
-                                <div className="alert alert-danger py-2 small text-center" role="alert">
+                                <div className="alert alert-danger py-2 small text-center alerta-animada" role="alert">
                                     {errorMsg}
                                 </div>
                             )}
 
                             <form onSubmit={handleSubmit} noValidate>
-                                <div className="mb-3">
-                                    <label htmlFor="loginNickname" className="form-label fw-bold mb-1">
-                                        Usuario
-                                    </label>
+                                <div className="form-floating mb-3">
                                     <input
                                         id="loginNickname"
                                         type="text"
@@ -95,12 +93,10 @@ export const LoginCard = () => {
                                         onChange={(e) => setNickName(e.target.value)}
                                         disabled={isSubmitting}
                                     />
+                                    <label htmlFor="loginNickname">Usuario</label>
                                 </div>
 
-                                <div className="mb-3">
-                                    <label htmlFor="loginPassword" className="form-label fw-bold mb-1">
-                                        Contraseña
-                                    </label>
+                                <div className="form-floating mb-3">
                                     <input
                                         id="loginPassword"
                                         type="password"
@@ -110,14 +106,18 @@ export const LoginCard = () => {
                                         onChange={(e) => setPassword(e.target.value)}
                                         disabled={isSubmitting}
                                     />
+                                    <label htmlFor="loginPassword">Contraseña</label>
                                 </div>
 
                                 <div className="d-grid mt-3">
                                     <button
                                         type="submit"
-                                        className="btn btn-primary fw-semibold py-2"
+                                        className="btn btn-primary fw-semibold py-2 rounded-pill btn-animado"
                                         disabled={isSubmitting}
                                     >
+                                        {isSubmitting && (
+                                            <span className="spinner-border spinner-border-sm me-2" aria-hidden="true" />
+                                        )}
                                         {isSubmitting ? 'Ingresando...' : 'Iniciar sesión'}
                                     </button>
                                 </div>
@@ -126,7 +126,7 @@ export const LoginCard = () => {
                             <hr className="my-4" />
 
                             <div className="text-center">
-                                <Link to="/register" className="btn btn-outline-success fw-semibold px-4">
+                                <Link to="/register" className="btn btn-outline-success fw-semibold px-4 rounded-pill btn-animado">
                                     Crear cuenta nueva
                                 </Link>
                             </div>

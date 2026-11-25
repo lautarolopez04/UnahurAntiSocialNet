@@ -118,24 +118,28 @@ export function CreatePost() {
 
   return (
     <div className="container py-4" style={{ maxWidth: '650px' }}>
-      <div className="card border shadow-sm rounded-3">
+      <div className="card border shadow-sm rounded-4 auth-card animar-entrada">
         <div className="card-body p-4">
-          <h2 className="h4 fw-bold mb-3">Crear publicación</h2>
+          <h2 className="h4 fw-bold mb-1">Crear publicación</h2>
+          <p className="text-muted small mb-4">Contale algo a la comunidad.</p>
 
-          {errorMsg && <div className="alert alert-danger py-2">{errorMsg}</div>}
+          {errorMsg && <div className="alert alert-danger py-2 alerta-animada">{errorMsg}</div>}
 
           <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label htmlFor="postDescription" className="form-label fw-bold">Descripción</label>
+            <div className="form-floating mb-1">
               <textarea
                 id="postDescription"
                 className="form-control"
-                rows={3}
                 placeholder="Escribí algo..."
+                style={{ height: '130px' }}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 disabled={isSubmitting}
               />
+              <label htmlFor="postDescription">¿Qué está pasando?</label>
+            </div>
+            <div className="text-end mb-3">
+              <small className="text-muted">{description.length} caracteres</small>
             </div>
 
             <div className="mb-3">
@@ -172,7 +176,7 @@ export function CreatePost() {
                       <img
                         src={url.trim()}
                         alt={`Vista previa de la imagen ${index + 1}`}
-                        className="preview-img rounded mt-2"
+                        className="preview-img rounded mt-2 animar-entrada"
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
                         }}
@@ -187,7 +191,7 @@ export function CreatePost() {
 
               <button
                 type="button"
-                className="btn btn-outline-primary btn-sm mt-2"
+                className="btn btn-outline-primary btn-sm mt-2 rounded-pill px-3 btn-animado"
                 onClick={addImageField}
               >
                 + Agregar otra URL
@@ -206,7 +210,7 @@ export function CreatePost() {
                     type="button"
                     onClick={() => toggleTag(tag.id)}
                     aria-pressed={selectedTags.includes(tag.id)}
-                    className={`btn btn-sm ${
+                    className={`btn btn-sm rounded-pill tag-chip ${
                       selectedTags.includes(tag.id)
                         ? 'btn-primary'
                         : 'btn-outline-secondary'
@@ -218,7 +222,10 @@ export function CreatePost() {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-primary w-100" disabled={isSubmitting}>
+            <button type="submit" className="btn btn-primary w-100 rounded-pill py-2 fw-semibold btn-animado" disabled={isSubmitting}>
+              {isSubmitting && (
+                <span className="spinner-border spinner-border-sm me-2" aria-hidden="true" />
+              )}
               {isSubmitting ? 'Publicando...' : 'Publicar'}
             </button>
           </form>

@@ -1,7 +1,9 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Container, Card, Badge, Button, Form, Alert, Spinner, ListGroup } from 'react-bootstrap';
+import { Container, Card, Badge, Button, Form, Alert, ListGroup } from 'react-bootstrap';
 import { useAuth } from '../context/AuthContext';
+import { Avatar } from '../components/Avatar';
+import { SkeletonCard } from '../components/SkeletonCard';
 import type { Post, PostImage, Comment } from '../types';
 
 const API_URL = 'http://localhost:3001'; 
@@ -122,10 +124,8 @@ export const PostDetail = () => {
 
   if (loading) {
     return (
-      <Container className="text-center my-5">
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Cargando publicación...</span>
-        </Spinner>
+      <Container className="py-4" style={{ maxWidth: '800px' }}>
+        <SkeletonCard cantidad={1} />
       </Container>
     );
   }
@@ -143,12 +143,18 @@ export const PostDetail = () => {
 
   return (
     <Container className="py-4" style={{ maxWidth: '800px' }}>
-      <Link to="/" className="btn btn-outline-secondary btn-sm mb-3">
+      <Link to="/" className="btn btn-outline-secondary btn-sm mb-3 rounded-pill px-3 btn-animado">
         ← Volver al feed
       </Link>
 
-      <Card as="article" className="mb-4 shadow-sm">
+      <Card as="article" className="mb-4 shadow-sm animar-entrada">
         <Card.Body>
+          {post.User && (
+            <div className="d-flex align-items-center gap-2 mb-3">
+              <Avatar nickName={post.User.nickName} tamano={44} />
+              <span className="fw-bold">@{post.User.nickName}</span>
+            </div>
+          )}
           <Card.Text className="fs-5" style={{ whiteSpace: 'pre-line' }}>{post.description}</Card.Text>
 
           
@@ -173,7 +179,7 @@ export const PostDetail = () => {
           {post.Tags && post.Tags.length > 0 && (
             <div className="mt-3">
               {post.Tags.map((tag) => (
-                <Badge bg="secondary" className="me-1" key={tag.id}>
+                <Badge bg="secondary" className="me-1 tag-badge" key={tag.id}>
                   #{tag.name}
                 </Badge>
               ))}
@@ -190,23 +196,30 @@ export const PostDetail = () => {
         <p className="text-muted">Aún no hay comentarios visibles en esta publicación.</p>
       ) : (
         <ListGroup className="mb-4">
-          {comments.map((comment) => (
-            <ListGroup.Item key={comment.id}>
-              <small className="text-muted d-block mb-1">
-                {comment.User?.nickName ? `@${comment.User.nickName}` : `Usuario #${comment.userId}`}
-              </small>
-              <span style={{ whiteSpace: 'pre-line' }}>{comment.content}</span>
+          {comments.map((comment, index) => (
+            <ListGroup.Item
+              key={comment.id}
+              className="d-flex gap-3 comentario-item animar-entrada"
+              style={{ animationDelay: `${Math.min(index, 8) * 60}ms` }}
+            >
+              <Avatar nickName={comment.User?.nickName || `usuario${comment.userId}`} tamano={36} />
+              <div>
+                <small className="text-muted d-block mb-1">
+                  {comment.User?.nickName ? `@${comment.User.nickName}` : `Usuario #${comment.userId}`}
+                </small>
+                <span style={{ whiteSpace: 'pre-line' }}>{comment.content}</span>
+              </div>
             </ListGroup.Item>
           ))}
         </ListGroup>
       )}
 
      
-      <Card className="shadow-sm">
+      <Card className="shadow-sm auth-card animar-entrada">
         <Card.Body>
           <h3 className="h5 mb-3">Agregar un comentario</h3>
           
-          {commentError && <Alert variant="danger">{commentError}</Alert>}
+          {commentError && <Alert variant="danger" className="alerta-animada">{commentError}</Alert>}
 
           {user ? (
             <Form onSubmit={handleCommentSubmit}>
@@ -225,7 +238,10 @@ export const PostDetail = () => {
                 </Form.Text>
               </Form.Group>
 
-              <Button variant="primary" type="submit" disabled={submitting}>
+              <Button variant="primary" type="submit" className="rounded-pill px-4 btn-animado" disabled={submitting}>
+                {submitting && (
+                  <span className="spinner-border spinner-border-sm me-2" aria-hidden="true" />
+                )}
                 {submitting ? 'Enviando...' : 'Comentar'}
               </Button>
             </Form>
