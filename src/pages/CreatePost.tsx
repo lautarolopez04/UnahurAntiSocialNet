@@ -18,6 +18,14 @@ export function CreatePost() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    document.title = 'Nueva publicación | UnaHur Anti-Social Net';
+
+    return () => {
+      document.title = 'UnaHur Anti-Social Net';
+    };
+  }, []);
+
+  useEffect(() => {
     fetch(`${API_URL}/tags`)
       .then((res) => res.json())
       .then((data) => {
@@ -34,6 +42,10 @@ export function CreatePost() {
 
   const addImageField = () => {
     setImageUrls((prev) => [...prev, '']);
+  };
+
+  const removeImageField = (index: number) => {
+    setImageUrls((prev) => prev.filter((_, currentIndex) => currentIndex !== index));
   };
 
   const updateImageUrl = (index: number, newValue: string) => {
@@ -114,31 +126,62 @@ export function CreatePost() {
 
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label className="form-label fw-bold">Descripción</label>
+              <label htmlFor="postDescription" className="form-label fw-bold">Descripción</label>
               <textarea
+                id="postDescription"
                 className="form-control"
                 rows={3}
                 placeholder="Escribí algo..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+                disabled={isSubmitting}
               />
             </div>
 
             <div className="mb-3">
-              <label className="form-label fw-bold d-block">
+              <label htmlFor="imageUrl0" className="form-label fw-bold d-block">
                 URLs de imágenes (opcional)
               </label>
 
               <div className="d-flex flex-column gap-2">
                 {imageUrls.map((url, index) => (
-                  <input
-                    key={index}
-                    type="text"
-                    className="form-control"
-                    placeholder="https://..."
-                    value={url}
-                    onChange={(e) => updateImageUrl(index, e.target.value)}
-                  />
+                  <div key={index}>
+                    <div className="d-flex gap-2">
+                      <input
+                        id={`imageUrl${index}`}
+                        type="text"
+                        className="form-control"
+                        placeholder="https://..."
+                        aria-label={`URL de la imagen ${index + 1}`}
+                        value={url}
+                        onChange={(e) => updateImageUrl(index, e.target.value)}
+                        disabled={isSubmitting}
+                      />
+                      {imageUrls.length > 1 && (
+                        <button
+                          type="button"
+                          className="btn btn-outline-danger"
+                          onClick={() => removeImageField(index)}
+                          aria-label={`Quitar la imagen ${index + 1}`}
+                        >
+                          ✕
+                        </button>
+                      )}
+                    </div>
+                    {url.trim() && (
+                      <img
+                        src={url.trim()}
+                        alt={`Vista previa de la imagen ${index + 1}`}
+                        className="preview-img rounded mt-2"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
+                        onLoad={(e) => {
+                          e.currentTarget.style.display = 'block';
+                        }}
+                      />
+                    )}
+                  </div>
                 ))}
               </div>
 
@@ -152,13 +195,17 @@ export function CreatePost() {
             </div>
 
             <div className="mb-4">
-              <label className="form-label fw-bold d-block">Etiquetas</label>
+              <p className="form-label fw-bold d-block mb-2">Etiquetas</p>
+              {tags.length === 0 && (
+                <small className="text-muted">No hay etiquetas disponibles.</small>
+              )}
               <div className="d-flex flex-wrap gap-2">
                 {tags.map((tag) => (
                   <button
                     key={tag.id}
                     type="button"
                     onClick={() => toggleTag(tag.id)}
+                    aria-pressed={selectedTags.includes(tag.id)}
                     className={`btn btn-sm ${
                       selectedTags.includes(tag.id)
                         ? 'btn-primary'

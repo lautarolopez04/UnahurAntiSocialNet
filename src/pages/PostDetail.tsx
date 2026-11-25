@@ -65,6 +65,14 @@ export const PostDetail = () => {
     };
   }, [id]);
 
+  useEffect(() => {
+    document.title = 'Publicación | UnaHur Anti-Social Net';
+
+    return () => {
+      document.title = 'UnaHur Anti-Social Net';
+    };
+  }, []);
+
   // Manejo del envío del comentario (POST /comments)
   const handleCommentSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -115,7 +123,9 @@ export const PostDetail = () => {
   if (loading) {
     return (
       <Container className="text-center my-5">
-        <Spinner animation="border" role="status" />
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Cargando publicación...</span>
+        </Spinner>
       </Container>
     );
   }
@@ -124,9 +134,9 @@ export const PostDetail = () => {
     return (
       <Container className="py-4">
         <Alert variant="danger">{error || 'Publicación no encontrada'}</Alert>
-        <Link to="/">
-          <Button variant="secondary">Volver al inicio</Button>
-        </Link>
+        <Button as={Link} to="/" variant="secondary">
+          Volver al inicio
+        </Button>
       </Container>
     );
   }
@@ -137,9 +147,9 @@ export const PostDetail = () => {
         ← Volver al feed
       </Link>
 
-      <Card className="mb-4 shadow-sm">
+      <Card as="article" className="mb-4 shadow-sm">
         <Card.Body>
-          <Card.Text className="fs-5">{post.description}</Card.Text>
+          <Card.Text className="fs-5" style={{ whiteSpace: 'pre-line' }}>{post.description}</Card.Text>
 
           
           {images.length > 0 && (
@@ -148,9 +158,12 @@ export const PostDetail = () => {
                 <img
                   key={img.id}
                   src={img.url}
-                  alt="Imagen adjunta al post"
-                  className="img-fluid rounded"
-                  style={{ maxHeight: '450px', objectFit: 'contain', backgroundColor: '#f8f9fa' }}
+                  alt={`Imagen adjunta a la publicación: ${post.description}`}
+                  className="img-fluid rounded post-detail-img"
+                  loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
                 />
               ))}
             </div>
@@ -170,7 +183,8 @@ export const PostDetail = () => {
       </Card>
 
      
-      <h4 className="mb-3">Comentarios ({comments.length})</h4>
+      <section aria-labelledby="titulo-comentarios">
+      <h2 id="titulo-comentarios" className="h4 mb-3">Comentarios ({comments.length})</h2>
 
       {comments.length === 0 ? (
         <p className="text-muted">Aún no hay comentarios visibles en esta publicación.</p>
@@ -178,8 +192,10 @@ export const PostDetail = () => {
         <ListGroup className="mb-4">
           {comments.map((comment) => (
             <ListGroup.Item key={comment.id}>
-              <small className="text-muted d-block mb-1">Usuario #{comment.userId}</small>
-              <span>{comment.content}</span>
+              <small className="text-muted d-block mb-1">
+                {comment.User?.nickName ? `@${comment.User.nickName}` : `Usuario #${comment.userId}`}
+              </small>
+              <span style={{ whiteSpace: 'pre-line' }}>{comment.content}</span>
             </ListGroup.Item>
           ))}
         </ListGroup>
@@ -188,7 +204,7 @@ export const PostDetail = () => {
      
       <Card className="shadow-sm">
         <Card.Body>
-          <h5 className="mb-3">Agregar un comentario</h5>
+          <h3 className="h5 mb-3">Agregar un comentario</h3>
           
           {commentError && <Alert variant="danger">{commentError}</Alert>}
 
@@ -202,7 +218,11 @@ export const PostDetail = () => {
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
                   disabled={submitting}
+                  maxLength={300}
                 />
+                <Form.Text className="text-muted">
+                  {newComment.length}/300 caracteres
+                </Form.Text>
               </Form.Group>
 
               <Button variant="primary" type="submit" disabled={submitting}>
@@ -216,6 +236,7 @@ export const PostDetail = () => {
           )}
         </Card.Body>
       </Card>
+      </section>
     </Container>
   );
 };

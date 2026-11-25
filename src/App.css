@@ -17,12 +17,12 @@
 }
 
 [data-bs-theme="dark"] {
-    --bs-body-bg: var(--ap-bg);
+    --bs-body-bg: var(--app-bg);
     --bs-body-bg-rgb: 7, 13, 14;
     --bs-body-color: var(--app-text);
     --bs-body-color-rgb: 230, 247, 248;
     --bs-border-color: var(--app-border);
-    --bs-secondary-color: var(--app-accent);
+    --bs-secondary-color: rgba(230, 247, 248, 0.65);
     --bs-primary: var(--app-accent);
     --bs-primary-rgb: var(--app-accent-rgb);
     --bs-link-color: var(--app-link);
@@ -57,8 +57,9 @@
 .form-control:focus,
 .form-select:focus {
     background-color: var(--app-surface);
-    color: var(--app-accent);
-    box-shadow: 0 0 0 0.25rem rgba(--app-accent-rgb, 0.25);
+    color: var(--app-text);
+    border-color: var(--app-accent);
+    box-shadow: 0 0 0 0.25rem rgba(var(--app-accent-rgb), 0.25);
 }
 
 .btn-primary {
@@ -73,7 +74,7 @@
 }
 
 .btn-outline-primary {
-    --bs-btn-color: var(--app-muted);
+    --bs-btn-color: var(--app-link);
     --bs-btn-border-color: var(--app-accent);
     --bs-btn-hover-bg: var(--app-accent);
     --bs-btn-hover-border-color: var(--app-accent);
@@ -119,4 +120,86 @@
 
 .text-primary {
     color: var(--app-link) !important;
+}
+
+.navbar .nav-link.active {
+    border-bottom: 2px solid var(--app-accent);
+}
+
+.post-card {
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.post-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--app-accent);
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.45) !important;
+}
+
+.post-card-img {
+    height: 220px;
+    object-fit: cover;
+}
+
+.post-descripcion {
+    max-height: 4.5em;
+    overflow: hidden;
+    white-space: pre-line;
+}
+
+.post-detail-img {
+    max-height: 450px;
+    width: 100%;
+    object-fit: contain;
+    background-color: var(--app-surface-2);
+}
+
+.preview-img {
+    max-height: 120px;
+    max-width: 100%;
+    object-fit: cover;
+    border: 1px solid var(--app-border);
+}
+
+.avatar-perfil {
+    width: 90px;
+    height: 90px;
+    font-size: 2.5rem;
+    color: #fff;
+    background-color: var(--app-accent);
+    border: 3px solid var(--app-border);
+}
+
+.btn-volver-arriba {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    font-size: 1.25rem;
+    z-index: 1030;
+}
+
+.app-footer {
+    border-top: 1px solid var(--app-border);
+    color: var(--bs-secondary-color);
+    background-color: var(--app-surface);
+}
+
+@media (max-width: 576px) {
+    .post-card-img {
+        height: 180px;
+    }
+
+    .avatar-perfil {
+        width: 70px;
+        height: 70px;
+        font-size: 2rem;
+    }
+
+    .btn-volver-arriba {
+        bottom: 1rem;
+        right: 1rem;
+    }
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import logoUnahur from '../assets/logoUnahur.png';
 
@@ -23,6 +23,7 @@ export function AppNavbar() {
   return (
     <Navbar
       bg="dark"
+      sticky="top"
       variant="dark"
       expand="lg"
       className="mb-4"
@@ -41,16 +42,16 @@ export function AppNavbar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/" onClick={cerrarMenu}>
+            <Nav.Link as={NavLink} to="/" end onClick={cerrarMenu}>
               Inicio
             </Nav.Link>
 
             {user && (
               <>
-                <Nav.Link as={Link} to="/crear-post" onClick={cerrarMenu}>
+                <Nav.Link as={NavLink} to="/crear-post" onClick={cerrarMenu}>
                   Nueva Publicación
                 </Nav.Link>
-                <Nav.Link as={Link} to="/perfil" onClick={cerrarMenu}>
+                <Nav.Link as={NavLink} to="/perfil" onClick={cerrarMenu}>
                   Mi Perfil (@{user.nickName})
                 </Nav.Link>
               </>
@@ -64,10 +65,10 @@ export function AppNavbar() {
               </Button>
             ) : (
               <>
-                <Nav.Link as={Link} to="/login" onClick={cerrarMenu}>
+                <Nav.Link as={NavLink} to="/login" onClick={cerrarMenu}>
                   Iniciar Sesión
                 </Nav.Link>
-                <Nav.Link as={Link} to="/register" onClick={cerrarMenu}>
+                <Nav.Link as={NavLink} to="/register" onClick={cerrarMenu}>
                   Registrarse
                 </Nav.Link>
               </>

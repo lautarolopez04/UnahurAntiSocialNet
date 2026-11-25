@@ -12,8 +12,9 @@ import { CreatePost } from './pages/CreatePost';
 function App() {
   return (
     <BrowserRouter>
+      <div className="d-flex flex-column min-vh-100">
       <AppNavbar />
-      <main className="container mb-5">
+      <main className="container mb-5 flex-grow-1">
         <Routes>
           
           <Route path="/" element={<Home />} />
@@ -43,6 +44,10 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
+      <footer className="app-footer text-center py-3">
+        <small>UnaHur Anti-Social Net · Creación de Interfaces de Usuario · UNAHUR</small>
+      </footer>
+      </div>
     </BrowserRouter>
   );
 }

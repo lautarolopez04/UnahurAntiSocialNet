@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import type { Post, PostImage, Comment } from '../types';
 
 const API_URL = 'http://localhost:3001';
+const POSTS_POR_TANDA = 6;
 
 interface EnrichedPost extends Post {
   images: PostImage[];
@@ -17,6 +18,8 @@ export const Home = () => {
   const [posts, setPosts] = useState<EnrichedPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [cantidadVisible, setCantidadVisible] = useState<number>(POSTS_POR_TANDA);
+  const [mostrarBotonArriba, setMostrarBotonArriba] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchFeed = async () => {
@@ -55,6 +58,44 @@ export const Home = () => {
     fetchFeed();
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setMostrarBotonArriba(window.scrollY > 400);
+
+      const llegoAlFinal =
+        window.innerHeight + window.scrollY >= document.body.offsetHeight - 200;
+
+      if (llegoAlFinal && cantidadVisible < posts.length) {
+        setCantidadVisible(cantidadVisible + POSTS_POR_TANDA);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [cantidadVisible, posts.length]);
+
+  useEffect(() => {
+    document.title = `(${posts.length}) Inicio | UnaHur Anti-Social Net`;
+
+    return () => {
+      document.title = 'UnaHur Anti-Social Net';
+    };
+  }, [posts]);
+
+  const postsVisibles = posts.slice(0, cantidadVisible);
+  const hayMasPosts = cantidadVisible < posts.length;
+
+  const cargarMas = () => {
+    setCantidadVisible((prev) => prev + POSTS_POR_TANDA);
+  };
+
+  const volverArriba = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <Container className="py-4">
       <div className="p-4 mb-4 bg-dark text-white rounded-3 border-start border-4 border-primary shadow-sm">
@@ -64,19 +105,20 @@ export const Home = () => {
   </p>
 </div>
 <hr></hr>
+<section aria-labelledby="titulo-feed">
 <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="h4 fw-bold mb-0">Publicaciones recientes</h2>
+        <h2 id="titulo-feed" className="h4 fw-bold mb-0">Publicaciones recientes</h2>
         {user && (
-          <Link to="/crear-post">
-            <Button variant="primary" size="sm">
-              + Crear publicación
-            </Button>
-          </Link>
+          <Button as={Link} to="/crear-post" variant="primary" size="sm">
+            + Crear publicación
+          </Button>
         )}
       </div>
       {loading && (
         <div className="text-center my-5">
-          <Spinner animation="border" role="status" />
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Cargando publicaciones...</span>
+          </Spinner>
         </div>
       )}
 
@@ -90,20 +132,24 @@ export const Home = () => {
       )}
 
       <Row xs={1} md={2} className="g-4">
-        {posts.map((post) => (
+        {postsVisibles.map((post) => (
           <Col key={post.id}>
-            <Card className="h-100 shadow-sm">
+            <Card as="article" className="h-100 shadow-sm post-card">
               {post.images.length > 0 && (
                 <Card.Img
                   variant="top"
                   src={post.images[0].url}
-                  alt="Imagen de la publicación"
-                  style={{ maxHeight: '250px', objectFit: 'cover' }}
+                  alt={`Imagen de la publicación: ${post.description}`}
+                  className="post-card-img"
+                  loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
                 />
               )}
 
               <Card.Body className="d-flex flex-column">
-                <Card.Text>{post.description}</Card.Text>
+                <Card.Text className="post-descripcion">{post.description}</Card.Text>
 
                 <div className="mb-3">
                   {post.Tags?.map((tag) => (
@@ -115,21 +161,45 @@ export const Home = () => {
 
                 <div className="mt-auto d-flex justify-content-between align-items-center pt-2 border-top">
                   <small className="text-muted">
-                    💬 {post.visibleCommentsCount}{' '}
-                    {post.visibleCommentsCount === 1 ? 'comentario visible' : 'comentarios visibles'}
+                    <span aria-hidden="true">💬</span> {post.visibleCommentsCount}{' '}
+                    {post.visibleCommentsCount === 1 ? 'comentario' : 'comentarios'}
                   </small>
 
-                  <Link to={`/post/${post.id}`}>
-                    <Button variant="primary" size="sm">
-                      Ver más
-                    </Button>
-                  </Link>
+                  <Button as={Link} to={`/post/${post.id}`} variant="primary" size="sm">
+                    Ver más
+                  </Button>
                 </div>
               </Card.Body>
             </Card>
           </Col>
         ))}
       </Row>
+
+      {hayMasPosts && (
+        <div className="text-center mt-4">
+          <Button variant="outline-primary" onClick={cargarMas}>
+            Ver más publicaciones
+          </Button>
+        </div>
+      )}
+
+      {!loading && !hayMasPosts && posts.length > 0 && (
+        <p className="text-center text-muted mt-4 mb-0">
+          Llegaste al final. No hay más publicaciones por ahora.
+        </p>
+      )}
+</section>
+
+      {mostrarBotonArriba && (
+        <Button
+          variant="primary"
+          className="btn-volver-arriba shadow"
+          onClick={volverArriba}
+          aria-label="Volver arriba"
+        >
+          ↑
+        </Button>
+      )}
     </Container>
   );
 };
