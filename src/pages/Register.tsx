@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { createUser } from '../services/api'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import { BannerCard } from '../components/BannerCard'
 
 export function Register() {
@@ -13,6 +14,7 @@ export function Register() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
@@ -41,6 +43,10 @@ export function Register() {
     } finally {
       setIsSubmitting(false);
     }
+  }
+
+  if (user) {
+    return <Navigate to="/" replace />;
   }
 
   return (

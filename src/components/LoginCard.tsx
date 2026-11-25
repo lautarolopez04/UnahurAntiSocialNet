@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import type { User } from '../types/index';
 import { BannerCard } from '../components/BannerCard'
@@ -14,7 +14,7 @@ export const LoginCard = () => {
     const [errorMsg, setErrorMsg] = useState<string>('');
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-    const { login } = useAuth();
+    const { user, login } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
@@ -62,6 +62,10 @@ export const LoginCard = () => {
             setIsSubmitting(false);
         }
     };
+
+    if (user) {
+        return <Navigate to="/" replace />;
+    }
 
     return (
         <div className="container py-5">
