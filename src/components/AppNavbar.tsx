@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -7,16 +8,29 @@ import logoUnahur from '../assets/logoUnahur.png';
 export function AppNavbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [menuAbierto, setMenuAbierto] = useState(false);
+
+  const cerrarMenu = () => {
+    setMenuAbierto(false);
+  };
 
   const handleLogout = () => {
+    cerrarMenu();
     logout();
     navigate('/login');
   };
 
   return (
-    <Navbar bg="dark" variant="dark" expand="lg" className="mb-4">
+    <Navbar
+      bg="dark"
+      variant="dark"
+      expand="lg"
+      className="mb-4"
+      expanded={menuAbierto}
+      onToggle={(abierto) => setMenuAbierto(abierto)}
+    >
       <Container>
-        <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
+        <Navbar.Brand as={Link} to="/" onClick={cerrarMenu} className="d-flex align-items-center gap-2">
   <img
     src={logoUnahur}
     alt="Logo UnaHur"
@@ -27,16 +41,16 @@ export function AppNavbar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/">
+            <Nav.Link as={Link} to="/" onClick={cerrarMenu}>
               Inicio
             </Nav.Link>
 
             {user && (
               <>
-                <Nav.Link as={Link} to="/crear-post">
+                <Nav.Link as={Link} to="/crear-post" onClick={cerrarMenu}>
                   Nueva Publicación
                 </Nav.Link>
-                <Nav.Link as={Link} to="/perfil">
+                <Nav.Link as={Link} to="/perfil" onClick={cerrarMenu}>
                   Mi Perfil (@{user.nickName})
                 </Nav.Link>
               </>
@@ -50,10 +64,10 @@ export function AppNavbar() {
               </Button>
             ) : (
               <>
-                <Nav.Link as={Link} to="/login">
+                <Nav.Link as={Link} to="/login" onClick={cerrarMenu}>
                   Iniciar Sesión
                 </Nav.Link>
-                <Nav.Link as={Link} to="/register">
+                <Nav.Link as={Link} to="/register" onClick={cerrarMenu}>
                   Registrarse
                 </Nav.Link>
               </>
