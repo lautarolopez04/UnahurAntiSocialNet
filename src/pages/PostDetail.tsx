@@ -1,12 +1,14 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Container, Card, Badge, Button, Form, Alert, Spinner, ListGroup } from 'react-bootstrap';
+import { useAuth } from '../context/AuthContext';
 import type { Post, PostImage, Comment } from '../types';
 
 const API_URL = 'http://localhost:3001'; 
 
 export const PostDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const { user } = useAuth();
 
   const [post, setPost] = useState<Post | null>(null);
   const [images, setImages] = useState<PostImage[]>([]);
@@ -66,8 +68,10 @@ export const PostDetail = () => {
       return;
     }
 
-    // Cuando tengas el AuthContext, reemplazá este 1 por user.id
-    const currentUserId = 1; 
+    if (!user) {
+      setCommentError('Tenés que iniciar sesión para comentar.');
+      return;
+    }
 
     try {
       setSubmitting(true);
@@ -79,7 +83,7 @@ export const PostDetail = () => {
         body: JSON.stringify({
           content: newComment.trim(),
           postId: Number(id),
-          userId: currentUserId,
+          userId: user.id,
         }),
       });
 
@@ -180,22 +184,28 @@ export const PostDetail = () => {
           
           {commentError && <Alert variant="danger">{commentError}</Alert>}
 
-          <Form onSubmit={handleCommentSubmit}>
-            <Form.Group className="mb-3" controlId="commentContent">
-              <Form.Control
-                as="textarea"
-                rows={3}
-                placeholder="Escribí tu comentario acá..."
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                disabled={submitting}
-              />
-            </Form.Group>
+          {user ? (
+            <Form onSubmit={handleCommentSubmit}>
+              <Form.Group className="mb-3" controlId="commentContent">
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  placeholder="Escribí tu comentario acá..."
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  disabled={submitting}
+                />
+              </Form.Group>
 
-            <Button variant="primary" type="submit" disabled={submitting}>
-              {submitting ? 'Enviando...' : 'Comentar'}
-            </Button>
-          </Form>
+              <Button variant="primary" type="submit" disabled={submitting}>
+                {submitting ? 'Enviando...' : 'Comentar'}
+              </Button>
+            </Form>
+          ) : (
+            <p className="mb-0">
+              Para comentar tenés que <Link to="/login">iniciar sesión</Link>.
+            </p>
+          )}
         </Card.Body>
       </Card>
     </Container>
