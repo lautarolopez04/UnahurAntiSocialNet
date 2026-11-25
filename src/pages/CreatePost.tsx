@@ -15,6 +15,7 @@ export function CreatePost() {
   const [tags, setTags] = useState<Tag[]>([]);
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
   const [errorMsg, setErrorMsg] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     fetch(`${API_URL}/tags`)
@@ -54,6 +55,7 @@ export function CreatePost() {
       return;
     }
 
+    setIsSubmitting(true);
     try {
       const res = await fetch(`${API_URL}/posts`, {
         method: 'POST',
@@ -88,6 +90,8 @@ export function CreatePost() {
       navigate('/perfil');
     } catch {
       setErrorMsg('No se pudo publicar. Revisá los datos o el servidor.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -158,8 +162,8 @@ export function CreatePost() {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-primary w-100">
-              Publicar
+            <button type="submit" className="btn btn-primary w-100" disabled={isSubmitting}>
+              {isSubmitting ? 'Publicando...' : 'Publicar'}
             </button>
           </form>
         </div>
